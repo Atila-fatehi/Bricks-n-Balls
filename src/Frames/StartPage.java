@@ -48,6 +48,13 @@ public class StartPage extends JFrame {
         button3.setBackground(new Color(0x002A5A));
         button3.setForeground(new Color(0x7AB2E1));
         button3.setFont(new Font("HelveticaNeue-CondensedBlack" , Font.BOLD , 25));
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SettingPage();
+            }
+        });
 
         JButton button4 = new JButton("Exit");
         button4.setBounds(100, 410, 300, 50);
@@ -57,6 +64,12 @@ public class StartPage extends JFrame {
         button4.setBackground(new Color(0x002A5A));
         button4.setForeground(new Color(0x7AB2E1));
         button4.setFont(new Font("HelveticaNeue-CondensedBlack" , Font.BOLD , 25));
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
 
         add(button1);
         add(button2);
