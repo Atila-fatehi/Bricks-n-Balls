@@ -1,10 +1,9 @@
-package Frames;
+package Pages;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Paths;
 
 public class HistoryPage extends JFrame {
     public HistoryPage() {
@@ -15,19 +14,20 @@ public class HistoryPage extends JFrame {
         setLocationRelativeTo(null);
         setLayout(null);
         setVisible(true);
+        setResizable(false);
 
 
         JTextArea textArea = new JTextArea("");
         textArea.setLineWrap(true);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(100 , 50 , 300 ,450);
+        scrollPane.setBounds(50 , 50 , 400 ,500);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         getContentPane().add(scrollPane);
 
 
         JButton button1 = new JButton("Back");
-        button1.setBounds(100, 550, 300, 50);
+        button1.setBounds(100, 570, 300, 50);
         button1.setFocusable(false);
         button1.setHorizontalAlignment(JButton.CENTER);
         button1.setHorizontalTextPosition(JButton.CENTER);

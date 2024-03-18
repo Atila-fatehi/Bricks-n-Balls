@@ -1,4 +1,4 @@
-package Frames;
+package Pages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +13,7 @@ public class StartPage extends JFrame {
         setSize(500, 700);
         setLocationRelativeTo(null);
         setLayout(null);
+        setResizable(false);
 
         int highScore = 0;
 
@@ -30,6 +31,13 @@ public class StartPage extends JFrame {
         button1.setBackground(new Color(0x002A5A));
         button1.setForeground(new Color(0x7AB2E1));
         button1.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new GamePrepPage();
+            }
+        });
 
         JButton button2 = new JButton("History");
         button2.setBounds(100, 270, 300, 50);

@@ -1,4 +1,4 @@
-package Frames;
+package Pages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +15,7 @@ public class SettingPage extends JFrame {
         setLocationRelativeTo(null);
         setLayout(null);
         setVisible(true);
+        setResizable(false);
 
         JCheckBox checkBox1 = new JCheckBox("Aim");
         checkBox1.setBounds(120, 100, 300, 50);
