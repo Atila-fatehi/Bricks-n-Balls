@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41ba47eb-07f1-4a71-8349-9589d124cefd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Music/MusicPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Graphic/Line.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/HistoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/HistoryPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/SettingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/SettingPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/StartPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/StartPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pages/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
