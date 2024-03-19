@@ -17,9 +17,10 @@ public class HistoryPage extends JFrame {
         setResizable(false);
 
 
-        JTextArea textArea = new JTextArea("");
+        JTextArea textArea = new JTextArea("You have no games in the history");
         textArea.setLineWrap(true);
         textArea.setEditable(false);
+        textArea.setFont(new Font("HelveticaNeue-CondensedBlack" , Font.BOLD , 15));
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setBounds(50 , 50 , 400 ,500);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

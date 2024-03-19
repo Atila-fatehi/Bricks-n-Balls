@@ -24,14 +24,14 @@ public class GamePrepPage extends JFrame {
         JLabel label = new JLabel("Choose Difficulty : ");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setHorizontalTextPosition(JLabel.CENTER);
-        label.setBounds(200, 10, 300, 50);
+        label.setBounds(200, 50, 300, 50);
         label.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
         label.setForeground(new Color(0x002A5A));
         add(label);
 
 
         JCheckBox easy = new JCheckBox("Easy");
-        easy.setBounds(70, 70, 200, 50);
+        easy.setBounds(70, 110, 200, 50);
         easy.setFocusable(false);
         easy.setBackground(new Color(0xA6C8EA));
         easy.setForeground(new Color(0x002A5A));
@@ -40,7 +40,7 @@ public class GamePrepPage extends JFrame {
         add(easy);
 
         JCheckBox medium = new JCheckBox("Medium");
-        medium.setBounds(270, 70, 200, 50);
+        medium.setBounds(270, 110, 200, 50);
         medium.setFocusable(false);
         medium.setBackground(new Color(0xA6C8EA));
         medium.setForeground(new Color(0x002A5A));
@@ -50,7 +50,7 @@ public class GamePrepPage extends JFrame {
 
 
         JCheckBox hard = new JCheckBox("Hard");
-        hard.setBounds(470, 70, 200, 50);
+        hard.setBounds(470, 110, 200, 50);
         hard.setFocusable(false);
         hard.setBackground(new Color(0xA6C8EA));
         hard.setForeground(new Color(0x002A5A));
@@ -135,7 +135,7 @@ public class GamePrepPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                // new StartPage();
+                 new Game();
             }
         });
 
@@ -160,9 +160,15 @@ public class GamePrepPage extends JFrame {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        //border like stuff
+        g.setColor(new Color(1));
+        g.fillOval(548,308, 54 ,54);
+
         g.setColor(color);
         g.fillOval(550,310, 50 ,50);
 
+
         g.dispose();
     }
+
 }
