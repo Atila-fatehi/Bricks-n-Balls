@@ -1,5 +1,7 @@
 package Pages;
 
+import Music.MusicPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 
 public class StartPage extends JFrame {
-    public StartPage() {
+    public StartPage(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("Swipe Brick Breaker+");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +38,7 @@ public class StartPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new GamePrepPage();
+                new GamePrepPage(musicPlayer);
             }
         });
 
@@ -52,7 +54,7 @@ public class StartPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HistoryPage();
+                new HistoryPage(musicPlayer);
             }
         });
 
@@ -69,7 +71,7 @@ public class StartPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 try {
-                    new SettingPage();
+                    new SettingPage(musicPlayer);
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

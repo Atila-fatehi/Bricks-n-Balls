@@ -1,12 +1,14 @@
 package Pages;
 
+import Music.MusicPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HistoryPage extends JFrame {
-    public HistoryPage() {
+    public HistoryPage(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("History");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +42,7 @@ public class HistoryPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new StartPage();
+                new StartPage(musicPlayer);
             }
         });
     }

@@ -1,5 +1,7 @@
 package Pages;
 
+import Music.MusicPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +21,7 @@ public class SettingPage extends JFrame {
     boolean music;
     boolean saveToHistory;
 
-    public SettingPage() throws FileNotFoundException {
+    public SettingPage(MusicPlayer musicPlayer) throws FileNotFoundException {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\settings.txt");
         if (file.exists()) {
             Scanner scanner = new Scanner(file);
@@ -78,6 +80,12 @@ public class SettingPage extends JFrame {
                 try {
                     save(aim, checkBox2.isSelected(), saveToHistory);
                     music = !music;
+                    if (checkBox2.isSelected()){
+                        musicPlayer.replay();
+                    }else{
+                        musicPlayer.stop();
+                    }
+
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -137,7 +145,7 @@ public class SettingPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new StartPage();
+                new StartPage(musicPlayer);
             }
         });
     }

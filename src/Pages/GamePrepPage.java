@@ -1,5 +1,7 @@
 package Pages;
 
+import Music.MusicPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +10,7 @@ import java.nio.file.Paths;
 
 public class GamePrepPage extends JFrame {
     Color color = Color.WHITE;
-    public GamePrepPage() {
+    public GamePrepPage(MusicPlayer musicPlayer) {
 
         repaint();
 
@@ -152,7 +154,7 @@ public class GamePrepPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new StartPage();
+                new StartPage(musicPlayer);
             }
         });
     }
