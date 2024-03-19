@@ -10,6 +10,11 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class GameArea extends JPanel {
+    int difficulty;
+    int red;
+    int green;
+    int blue;
+    Color ballColor;
     final int WIDTH = 300;
     final int HEIGHT = 700;
     Line line;
@@ -19,6 +24,7 @@ public class GameArea extends JPanel {
 
     public GameArea() {
         fileStuff();
+        ballColor = new Color(red , green , blue);
         line = new Line(300, 700, 0, 0);
         addMouseListener(new MouseAdapter() {
             @Override
@@ -41,12 +47,11 @@ public class GameArea extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(ballColor);
+        g.fillOval(50,50,50,50);
 
-        //Draw aim Line
         if (aim) {
-            //if (line.getY2() < balls.getFirst().getY() - 15) {
             line.paintComponent(g);
-            //}
         }
     }
 
@@ -87,6 +92,24 @@ public class GameArea extends JPanel {
             }
         } else {
             aim = true;
+        }
+        file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\prep.txt");
+        if (file.exists()) {
+            try {
+                Scanner scanner = new Scanner(file);
+                difficulty = Integer.parseInt(scanner.nextLine());
+                red = Integer.parseInt(scanner.nextLine());
+                green = Integer.parseInt(scanner.nextLine());
+                blue = Integer.parseInt(scanner.nextLine());
+
+            }catch (Exception e){
+
+            }
+        } else {
+          difficulty = 1;
+          red = 0;
+          green = 0;
+          blue = 0;
         }
     }
 }

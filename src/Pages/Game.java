@@ -54,7 +54,7 @@ public class Game extends JFrame {
 
         x = new ImageIcon(Paths.get("").toAbsolutePath() + "\\src\\images\\back.png");
         img = x.getImage();
-        newimg = img.getScaledInstance(56, 56, java.awt.Image.SCALE_SMOOTH);
+        newimg = img.getScaledInstance(53, 53, java.awt.Image.SCALE_SMOOTH);
         newIcon = new ImageIcon(newimg);
         JButton back = new JButton(newIcon);
         back.setBackground(new Color(0xA6C8EA));

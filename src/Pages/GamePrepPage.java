@@ -6,14 +6,54 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class GamePrepPage extends JFrame {
+    File file;
+    PrintWriter printWriter;
+    int difficulty = 1;
+    int red;
+    int green;
+    int blue;
+    String name = "-";
     Color color = Color.WHITE;
+
     public GamePrepPage(MusicPlayer musicPlayer) {
 
-        repaint();
+        file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\prep.txt");
+        if (file.exists()) {
+            try {
+                Scanner scanner = new Scanner(file);
+                difficulty = Integer.parseInt(scanner.nextLine());
+                red = Integer.parseInt(scanner.nextLine());
+                green = Integer.parseInt(scanner.nextLine());
+                blue = Integer.parseInt(scanner.nextLine());
+                name = scanner.nextLine();
+            }catch (Exception e){
 
+            }
+        } else {
+            try {
+                printWriter = new PrintWriter(file);
+                printWriter.println("1");
+                printWriter.println("0");
+                printWriter.println("0");
+                printWriter.println("0");
+                printWriter.println("-");
+                printWriter.flush();
+                printWriter.close();
+            }catch (Exception e){
+
+            }
+
+        }
+
+
+        repaint();
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("Brick Breaker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,6 +79,19 @@ public class GamePrepPage extends JFrame {
         easy.setForeground(new Color(0x002A5A));
         easy.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
         easy.setSelected(true);
+        easy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(easy.isSelected()){
+                    try {
+                        save(1 , red , green , blue, name);
+                        difficulty = 1;
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
         add(easy);
 
         JCheckBox medium = new JCheckBox("Medium");
@@ -48,6 +101,19 @@ public class GamePrepPage extends JFrame {
         medium.setForeground(new Color(0x002A5A));
         medium.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
         medium.setSelected(true);
+        medium.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(medium.isSelected()){
+                    try {
+                        save(2 , red , green , blue, name);
+                        difficulty = 2;
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
         add(medium);
 
 
@@ -58,6 +124,19 @@ public class GamePrepPage extends JFrame {
         hard.setForeground(new Color(0x002A5A));
         hard.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
         hard.setSelected(true);
+        hard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(hard.isSelected()){
+                    try {
+                        save(3 , red , green , blue, name);
+                        difficulty = 3;
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
         add(hard);
 
         ButtonGroup group = new ButtonGroup();
@@ -104,7 +183,16 @@ public class GamePrepPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JColorChooser colorChooser = new JColorChooser();
-                color = JColorChooser.showDialog(null , "Pick a color" , Color.WHITE);
+                color = JColorChooser.showDialog(null, "Pick a color", Color.WHITE);
+//                System.out.println(color.toString());
+                red = color.getRed();
+                green = color.getGreen();
+                blue = color.getBlue();
+                try {
+                    save(difficulty , red , green ,blue , name);
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
                 repaint();
             }
         });
@@ -118,7 +206,7 @@ public class GamePrepPage extends JFrame {
         add(label3);
 
         JTextField textField = new JTextField();
-        textField.setBounds(200 , 520 , 300 , 50);
+        textField.setBounds(200, 520, 300, 50);
         textField.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
         textField.setBackground(new Color(0xFFFFFF));
         textField.setHorizontalAlignment(0);
@@ -137,7 +225,13 @@ public class GamePrepPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                 new Game(musicPlayer);
+                name = textField.getText();
+                try {
+                    save(difficulty , red , green , blue , name);
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                new Game(musicPlayer);
             }
         });
 
@@ -164,13 +258,22 @@ public class GamePrepPage extends JFrame {
         super.paint(g);
         //border like stuff
         g.setColor(new Color(1));
-        g.fillOval(548,308, 54 ,54);
+        g.fillOval(548, 308, 54, 54);
 
         g.setColor(color);
-        g.fillOval(550,310, 50 ,50);
+        g.fillOval(550, 310, 50, 50);
 
 
         g.dispose();
     }
-
+    public void save(int a, int red, int green, int blue , String name) throws FileNotFoundException {
+        printWriter = new PrintWriter(file);
+        printWriter.println(a);
+        printWriter.println(red);
+        printWriter.println(green);
+        printWriter.println(blue);
+        printWriter.println(name);
+        printWriter.flush();
+        printWriter.close();
+    }
 }
