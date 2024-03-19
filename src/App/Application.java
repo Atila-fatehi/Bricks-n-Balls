@@ -17,7 +17,7 @@ public class Application implements Runnable {
     public void run() {
         MusicPlayer musicPlayer = new MusicPlayer();
         musicPlayer.replay();
-        //new StartPage(musicPlayer);
-        new Game();
+        new StartPage(musicPlayer);
+        //new Game();
     }
 }

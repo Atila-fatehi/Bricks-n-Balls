@@ -1,5 +1,6 @@
 package Pages;
 
+import Music.MusicPlayer;
 import Panels.GameArea;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class Game extends JFrame {
     final int SCREEN_WIDTH = 600;
     final int SCREEN_HEIGHT = 900;
 
-    public Game() {
+    public Game(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("Brick Breaker +");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,6 +25,11 @@ public class Game extends JFrame {
         setLayout(null);
         setVisible(true);
         setResizable(false);
+        //game area
+        GameArea gameArea = new GameArea();
+        gameArea.setBackground(new Color(0xA6C8EA));
+        gameArea.setBounds(0, 80, 600, 710);
+        add(gameArea);
 
         //Top Panel for pause , time , score
 
@@ -39,6 +45,30 @@ public class Game extends JFrame {
         pause.setBackground(new Color(0xA6C8EA));
         pause.setFocusable(false);
         pause.setBounds(7, 7, 56, 56);
+        pause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.pauseGame();
+            }
+        });
+
+        x = new ImageIcon(Paths.get("").toAbsolutePath() + "\\src\\images\\back.png");
+        img = x.getImage();
+        newimg = img.getScaledInstance(56, 56, java.awt.Image.SCALE_SMOOTH);
+        newIcon = new ImageIcon(newimg);
+        JButton back = new JButton(newIcon);
+        back.setBackground(new Color(0xA6C8EA));
+        back.setFocusable(false);
+        back.setBounds(7 + 56 + 5, 7, 56, 56);
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new StartPage(musicPlayer);
+            }
+        });
+
+        topPanel.add(back);
         topPanel.add(pause);
 
         JLabel time = new JLabel("0");
@@ -53,10 +83,7 @@ public class Game extends JFrame {
         score.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 35));
         topPanel.add(score);
         //game area
-        GameArea gameArea = new GameArea();
-        gameArea.setBackground(new Color(0xA6C8EA));
-        gameArea.setBounds(0 , 80 , 600 , 710);
-        add(gameArea);
+
         //bottom panel for ball count
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(null);

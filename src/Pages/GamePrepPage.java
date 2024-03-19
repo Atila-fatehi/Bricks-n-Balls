@@ -137,7 +137,7 @@ public class GamePrepPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                 new Game();
+                 new Game(musicPlayer);
             }
         });
 

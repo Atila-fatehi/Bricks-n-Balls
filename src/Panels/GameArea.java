@@ -14,6 +14,7 @@ public class GameArea extends JPanel {
     final int HEIGHT = 700;
     Line line;
     boolean aim;
+    boolean gameRunning;
     Timer timer;
 
     public GameArea() {
@@ -50,6 +51,7 @@ public class GameArea extends JPanel {
     }
 
     public void startGame() {
+        gameRunning = true;
         timer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -57,6 +59,17 @@ public class GameArea extends JPanel {
             }
         });
         timer.start();
+    }
+
+    public void pauseGame() {
+        if (gameRunning) {
+            timer.stop();
+            gameRunning = false;
+        } else {
+            timer.start();
+            gameRunning = true;
+        }
+
     }
 
     private void fileStuff() {
