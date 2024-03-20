@@ -1,13 +1,19 @@
 package Panels;
 
+import GameObjects.ball;
 import Graphic.Line;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameArea extends JPanel {
     int difficulty;
@@ -15,63 +21,189 @@ public class GameArea extends JPanel {
     int green;
     int blue;
     Color ballColor;
-    final int WIDTH = 300;
-    final int HEIGHT = 700;
+    int mouseX;
+    int mouseY;
+    int score;
+    final int WIDTH = 453;
+    final int HEIGHT = 900;
     Line line;
+    ArrayList<ball> balls = new ArrayList<>();
     boolean aim;
     boolean gameRunning;
-    Timer timer;
+    boolean ballStillRunning = false;
+    boolean launched;
+    java.util.Timer timer;
+    int ballCount;
+    File file;
+    PrintWriter printWriter;
 
     public GameArea() {
+        file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
+        try {
+            printWriter = new PrintWriter(file);
+            printWriter.println("0");
+            printWriter.println("1");
+            printWriter.flush();
+            printWriter.close();
+        } catch (Exception e) {
+
+        }
         fileStuff();
-        ballColor = new Color(red , green , blue);
-        line = new Line(300, 700, 0, 0);
+        ballColor = new Color(red, green, blue);
+        startGame();
+        line = new Line(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2, balls.getFirst().getPosY() + balls.getFirst().getWidth() / 2, 0, 0);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                if (mouseY >= balls.getFirst().getPosY() - 20) {
+                    return;
+                }
+                if (!launched) {
+                    launched = true;
+                    java.util.Timer timer1 = new java.util.Timer();
+                    timer1.schedule(new TimerTask() {
+                        int i = 0;
 
+                        @Override
+                        public void run() {
+                            balls.get(i).setReadyToMove(true);
+                            if (i == balls.size() - 1) {
+                                timer1.cancel();
+                            }
+                            i++;
+                        }
+                    }, 0, 100);
+
+                    double angle = Math.atan2(line.getY2() - balls.getFirst().getPosY(), line.getX2() - balls.getFirst().getPosX());
+                    for (int i = 0; i < balls.size(); i++) {
+                        balls.get(i).setSpeedX((int) Math.round(balls.getFirst().getSpeed() * Math.cos(angle)));
+                        balls.get(i).setSpeedY((int) Math.round(balls.getFirst().getSpeed() * Math.sin(angle)));
+                    }
+                }
             }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                double angle = Math.atan2(e.getY() - 700, e.getX() - 300);
+                double angle = Math.atan2(e.getY() - balls.getFirst().getPosY(), e.getX() - balls.getFirst().getPosX());
                 line.setX2((int) Math.round(Math.cos(angle) * 1000000));
                 line.setY2((int) Math.round(Math.sin(angle) * 1000000));
+                mouseX = e.getX();
+                mouseY = e.getY();
             }
         });
-        startGame();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(ballColor);
-        g.fillOval(50,50,50,50);
+        for (int i = 0; i < balls.size(); i++) {
+            g.fillOval(balls.get(i).getPosX(), balls.get(i).getPosY(), balls.get(i).getWidth(), balls.get(i).getHeight());
+        }
+//        g.setColor(new Color(0x9D0625));
+//        g.fillRect(0 ,0 ,60 , 60);
+//        g.fillRect(63 ,0 ,60 , 60);
+//        g.fillRect(126 ,0 ,60 , 60);
+//        g.fillRect(189 ,0 ,60 , 60);
+//        g.fillRect( 252 ,0 ,60 , 60);
+//        g.fillRect( 315 ,0 ,60 , 60);
+//        g.fillRect( 378 ,0 ,60 , 60);
 
-        if (aim) {
-            line.paintComponent(g);
+        if (aim && !launched) {
+            if (mouseY <= balls.getFirst().getPosY() - 25) {
+                line.paintComponent(g);
+            }
+
         }
     }
 
     public void startGame() {
         gameRunning = true;
-        timer = new Timer(10, new ActionListener() {
+        launched = false;
+        balls.add(new ball(453 / 2 - 15, 700, 15, 15));
+        ballCount = 1;
+        timer = new java.util.Timer();
+        timer.schedule(new TimerTask() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void run() {
                 repaint();
+
+                //Move ball
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).move();
+                    balls.get(i).checkCollisionWithWalls();
+                }
+                ballStillRunning = false;
+                for (int i = 0; i < balls.size(); i++) {
+                    if (balls.get(i).isMoving()) {
+                        ballStillRunning = true;
+                    }
+                }
+                if (!ballStillRunning && launched) {
+                    launched = false;
+                    balls.add(new ball(453 / 2 - 15, 700, 15, 15));
+                    for (int i = 1; i < balls.size(); i++) {
+                        balls.get(i).setPosY(700);
+                        balls.getFirst().setPosY(700);
+                        balls.get(i).setPosX(balls.getFirst().getPosX());
+                        line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
+                    }
+                    ballCount++;
+                    save(score, ballCount);
+                }
+
+
             }
-        });
-        timer.start();
+        } , 0 , 10);
+//        timer = new Timer(10, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        timer.start();
     }
 
     public void pauseGame() {
         if (gameRunning) {
-            timer.stop();
             gameRunning = false;
+            timer.cancel();
         } else {
-            timer.start();
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    repaint();
+
+                    //Move ball
+                    for (int i = 0; i < balls.size(); i++) {
+                        balls.get(i).move();
+                        balls.get(i).checkCollisionWithWalls();
+                    }
+                    ballStillRunning = false;
+                    for (int i = 0; i < balls.size(); i++) {
+                        if (balls.get(i).isMoving()) {
+                            ballStillRunning = true;
+                        }
+                    }
+                    if (!ballStillRunning && launched) {
+                        launched = false;
+                        balls.add(new ball(453 / 2 - 15, 700, 15, 15));
+                        for (int i = 1; i < balls.size(); i++) {
+                            balls.get(i).setPosY(700);
+                            balls.getFirst().setPosY(700);
+                            balls.get(i).setPosX(balls.getFirst().getPosX());
+                            line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
+                        }
+                        ballCount++;
+                        save(score, ballCount);
+                    }
+
+
+                }
+            } , 0 , 10);
             gameRunning = true;
         }
 
@@ -102,14 +234,26 @@ public class GameArea extends JPanel {
                 green = Integer.parseInt(scanner.nextLine());
                 blue = Integer.parseInt(scanner.nextLine());
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         } else {
-          difficulty = 1;
-          red = 0;
-          green = 0;
-          blue = 0;
+            difficulty = 1;
+            red = 0;
+            green = 0;
+            blue = 0;
+        }
+    }
+
+    public void save(int a, int b) {
+        try {
+            printWriter = new PrintWriter(file);
+            printWriter.println(score);
+            printWriter.println(ballCount);
+            printWriter.flush();
+            printWriter.close();
+        } catch (Exception e) {
+
         }
     }
 }

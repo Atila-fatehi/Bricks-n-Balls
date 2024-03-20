@@ -20,7 +20,7 @@ public class GamePrepPage extends JFrame {
     int green;
     int blue;
     String name = "-";
-    Color color = Color.WHITE;
+    Color color = Color.BLACK;
 
     public GamePrepPage(MusicPlayer musicPlayer) {
 
@@ -32,6 +32,7 @@ public class GamePrepPage extends JFrame {
                 red = Integer.parseInt(scanner.nextLine());
                 green = Integer.parseInt(scanner.nextLine());
                 blue = Integer.parseInt(scanner.nextLine());
+                color = new Color(red ,green ,blue);
                 name = scanner.nextLine();
             }catch (Exception e){
 

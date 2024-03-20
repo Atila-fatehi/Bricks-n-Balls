@@ -9,11 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game extends JFrame {
-    final int SCREEN_WIDTH = 600;
+    final int SCREEN_WIDTH = 453;
     final int SCREEN_HEIGHT = 900;
 
     public Game(MusicPlayer musicPlayer) {
@@ -28,14 +31,14 @@ public class Game extends JFrame {
         //game area
         GameArea gameArea = new GameArea();
         gameArea.setBackground(new Color(0xA6C8EA));
-        gameArea.setBounds(0, 80, 600, 710);
+        gameArea.setBounds(0, 70, 600, 720);
         add(gameArea);
 
         //Top Panel for pause , time , score
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(null);
-        topPanel.setBounds(10, 10, 563, 70);
+        topPanel.setBounds(0, 0, 600, 70);
         topPanel.setBackground(new Color(0x002A5A));
         ImageIcon x = new ImageIcon(Paths.get("").toAbsolutePath() + "\\src\\images\\pause.png");
         Image img = x.getImage();
@@ -67,33 +70,56 @@ public class Game extends JFrame {
                 new StartPage(musicPlayer);
             }
         });
-
+        topPanel. setBorder(BorderFactory.createLineBorder(Color.BLACK));
         topPanel.add(back);
         topPanel.add(pause);
 
         JLabel time = new JLabel("0");
         time.setForeground(new Color(0xA6C8EA));
-        time.setBounds(500, 7, 56, 56);
-        time.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 35));
+        time.setBounds(380, 7, 56, 56);
+        time.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
         topPanel.add(time);
 
-        JLabel score = new JLabel("0");
+
+
+        JLabel score = new JLabel("score : 0");
         score.setForeground(new Color(0xA6C8EA));
-        score.setBounds(280, 7, 56, 56);
-        score.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 35));
+        score.setBounds(150, 7, 300, 56);
+        score.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
         topPanel.add(score);
-        //game area
 
         //bottom panel for ball count
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(null);
-        bottomPanel.setBounds(10, 785, 563, 70);
+        bottomPanel.setBounds(0, 785, 600, 80);
         bottomPanel.setBackground(new Color(0x002A5A));
 
-        JLabel ballCount = new JLabel("0");
+        JLabel ballCount = new JLabel("ball count : 1");
         ballCount.setForeground(new Color(0xA6C8EA));
-        ballCount.setBounds(280, 7, 56, 56);
-        ballCount.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 35));
+        ballCount.setBounds(150, 7, 400, 56);
+        ballCount.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
+
+        java.util.Timer seconds = new Timer();
+        seconds.schedule(new TimerTask() {
+            int s = 0;
+            @Override
+            public void run() {
+                s++;
+                time.setText(String.valueOf(s));
+                File file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
+                if (file.exists()) {
+                    try{
+                        Scanner scanner = new Scanner(file);
+                        score.setText("Score : " + scanner.nextLine());
+                        ballCount.setText("ball count : " + scanner.nextLine());
+                    }catch (Exception e){
+
+                    }
+                } else {
+
+                }
+            }
+        } , 1000 , 1000);
         bottomPanel.add(ballCount);
 
 
