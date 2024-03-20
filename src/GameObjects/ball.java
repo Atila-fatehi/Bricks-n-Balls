@@ -4,7 +4,7 @@ package GameObjects;
 public class ball extends GameObject {
     boolean isMoving;
     boolean isReadyToMove;
-    int speed = 6;
+    int speed = 7;
     int speedX;
     int speedY;
 
@@ -67,10 +67,15 @@ public class ball extends GameObject {
         if (posY <= 0) {
             speedY = -speedY;
         }
+    }
+
+    public boolean checkCollisionWithFloor(){
         if (posY >= 705) {
             speedY = -speedY;
             isMoving = false;
             isReadyToMove = false;
+            return true;
         }
+        return false;
     }
 }

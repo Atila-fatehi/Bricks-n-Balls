@@ -39,6 +39,7 @@ public class GameArea extends JPanel {
 
     public GameArea() {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
+        setFocusable(true);
         try {
             printWriter = new PrintWriter(file);
             printWriter.println("0");
@@ -73,7 +74,6 @@ public class GameArea extends JPanel {
                             i++;
                         }
                     }, 0, 100);
-
                     double angle = Math.atan2(line.getY2() - balls.getFirst().getPosY(), line.getX2() - balls.getFirst().getPosX());
                     for (int i = 0; i < balls.size(); i++) {
                         balls.get(i).setSpeedX((int) Math.round(balls.getFirst().getSpeed() * Math.cos(angle)));
@@ -87,8 +87,8 @@ public class GameArea extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
                 double angle = Math.atan2(e.getY() - balls.getFirst().getPosY(), e.getX() - balls.getFirst().getPosX());
-                line.setX2((int) Math.round(Math.cos(angle) * 1000000));
-                line.setY2((int) Math.round(Math.sin(angle) * 1000000));
+                line.setX2((int) Math.round(Math.cos(angle) * 10000));
+                line.setY2((int) Math.round(Math.sin(angle) * 10000));
                 mouseX = e.getX();
                 mouseY = e.getY();
             }
@@ -124,46 +124,46 @@ public class GameArea extends JPanel {
         launched = false;
         balls.add(new ball(453 / 2 - 15, 700, 15, 15));
         ballCount = 1;
+        ballStillRunning = false;
         timer = new java.util.Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                repaint();
-
                 //Move ball
                 for (int i = 0; i < balls.size(); i++) {
-                    balls.get(i).move();
-                    balls.get(i).checkCollisionWithWalls();
-                }
-                ballStillRunning = false;
-                for (int i = 0; i < balls.size(); i++) {
-                    if (balls.get(i).isMoving()) {
-                        ballStillRunning = true;
+                    if (balls.get(i).isReadyToMove()) {
+                        balls.get(i).move();
+                        balls.get(i).checkCollisionWithWalls();
+                        //for bricks
+                        if (balls.get(i).checkCollisionWithFloor()) {
+                            balls.get(i).setMoving(false);
+                            balls.get(i).setReadyToMove(false);
+                        }
+                        ballStillRunning = false;
+                        for (GameObjects.ball ball : balls) {
+                            if (ball.isMoving()) {
+                                ballStillRunning = true;
+                                break;
+                            }
+                        }
+                        if (!ballStillRunning && launched) {
+                            balls.add(new ball(453 / 2 - 15, 700, 15, 15));
+                            for (int j = 1; j < balls.size(); j++) {
+                                balls.get(j).setPosY(700);
+                                balls.getFirst().setPosY(700);
+                                balls.get(j).setPosX(balls.getFirst().getPosX());
+                                line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
+                            }
+                            ballCount++;
+                            save(score, ballCount);
+                            launched = false;
+                        }
+//                        repaint();
                     }
                 }
-                if (!ballStillRunning && launched) {
-                    launched = false;
-                    balls.add(new ball(453 / 2 - 15, 700, 15, 15));
-                    for (int i = 1; i < balls.size(); i++) {
-                        balls.get(i).setPosY(700);
-                        balls.getFirst().setPosY(700);
-                        balls.get(i).setPosX(balls.getFirst().getPosX());
-                        line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
-                    }
-                    ballCount++;
-                    save(score, ballCount);
-                }
-
-
+                repaint();
             }
-        } , 0 , 10);
-//        timer = new Timer(10, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        timer.start();
+        }, 10, 10);
     }
 
     public void pauseGame() {
@@ -203,7 +203,7 @@ public class GameArea extends JPanel {
 
 
                 }
-            } , 0 , 10);
+            }, 0, 10);
             gameRunning = true;
         }
 
