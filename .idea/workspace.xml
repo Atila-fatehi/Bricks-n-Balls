@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41ba47eb-07f1-4a71-8349-9589d124cefd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Thread/myThread.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GameObjects/brickGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GameObjects/easyBrickGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GameObjects/hardBrickGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GameObjects/mediumBrickGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataBase/prep.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/prep.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Panels/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +50,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;thread&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Asus/Desktop/swipe-brick-breaker-master/src&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Asus/Desktop/AP-2/src/Main.java&quot;
   }
@@ -60,6 +65,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>

@@ -79,7 +79,7 @@ public class GamePrepPage extends JFrame {
         easy.setBackground(new Color(0xA6C8EA));
         easy.setForeground(new Color(0x002A5A));
         easy.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
-        easy.setSelected(true);
+        easy.setSelected(difficulty == 1);
         easy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,7 +101,7 @@ public class GamePrepPage extends JFrame {
         medium.setBackground(new Color(0xA6C8EA));
         medium.setForeground(new Color(0x002A5A));
         medium.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
-        medium.setSelected(true);
+        medium.setSelected(difficulty == 2);
         medium.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,7 +124,7 @@ public class GamePrepPage extends JFrame {
         hard.setBackground(new Color(0xA6C8EA));
         hard.setForeground(new Color(0x002A5A));
         hard.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 20));
-        hard.setSelected(true);
+        hard.setSelected(difficulty == 3);
         hard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

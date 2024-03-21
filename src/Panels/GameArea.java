@@ -1,6 +1,6 @@
 package Panels;
 
-import GameObjects.ball;
+import GameObjects.*;
 import Graphic.Line;
 
 import javax.swing.*;
@@ -36,6 +36,8 @@ public class GameArea extends JPanel {
     int ballCount;
     File file;
     PrintWriter printWriter;
+    brickGenerator brickGenerator;
+    boolean[] b;
 
     public GameArea() {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
@@ -53,6 +55,15 @@ public class GameArea extends JPanel {
         ballColor = new Color(red, green, blue);
         startGame();
         line = new Line(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2, balls.getFirst().getPosY() + balls.getFirst().getWidth() / 2, 0, 0);
+        if(difficulty == 1){
+            brickGenerator = new easyBrickGenerator();
+        } else if (difficulty == 2) {
+            brickGenerator = new mediumBrickGenerator();
+        }else{
+            brickGenerator = new hardBrickGenerator();
+        }
+        brickGenerator.generate();
+        b = brickGenerator.getRow();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -102,14 +113,28 @@ public class GameArea extends JPanel {
         for (int i = 0; i < balls.size(); i++) {
             g.fillOval(balls.get(i).getPosX(), balls.get(i).getPosY(), balls.get(i).getWidth(), balls.get(i).getHeight());
         }
-//        g.setColor(new Color(0x9D0625));
-//        g.fillRect(0 ,0 ,60 , 60);
-//        g.fillRect(63 ,0 ,60 , 60);
-//        g.fillRect(126 ,0 ,60 , 60);
-//        g.fillRect(189 ,0 ,60 , 60);
-//        g.fillRect( 252 ,0 ,60 , 60);
-//        g.fillRect( 315 ,0 ,60 , 60);
-//        g.fillRect( 378 ,0 ,60 , 60);
+        g.setColor(new Color(0xB40228));
+        if(b[0]){
+            g.fillRect(0 ,0 ,60 , 60);
+        }
+        if(b[1]) {
+            g.fillRect(63, 0, 60, 60);
+        }
+        if(b[2]) {
+            g.fillRect(126, 0, 60, 60);
+        }
+        if(b[3]) {
+            g.fillRect(189, 0, 60, 60);
+        }
+        if(b[4]) {
+            g.fillRect(252, 0, 60, 60);
+        }
+        if(b[5]) {
+            g.fillRect(315, 0, 60, 60);
+        }
+        if(b[6]) {
+            g.fillRect(378, 0, 60, 60);
+        }
 
         if (aim && !launched) {
             if (mouseY <= balls.getFirst().getPosY() - 25) {
