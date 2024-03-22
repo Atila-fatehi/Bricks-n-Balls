@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,6 +37,8 @@ public class GameArea extends JPanel {
     PrintWriter printWriter;
     brickGenerator brickGenerator;
     boolean[] b;
+    ArrayList<brick> bricks = new ArrayList<>();
+    int num = 1;
 
     public GameArea() {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
@@ -55,15 +56,14 @@ public class GameArea extends JPanel {
         ballColor = new Color(red, green, blue);
         startGame();
         line = new Line(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2, balls.getFirst().getPosY() + balls.getFirst().getWidth() / 2, 0, 0);
-        if(difficulty == 1){
+        if (difficulty == 1) {
             brickGenerator = new easyBrickGenerator();
         } else if (difficulty == 2) {
             brickGenerator = new mediumBrickGenerator();
-        }else{
+        } else {
             brickGenerator = new hardBrickGenerator();
         }
-        brickGenerator.generate();
-        b = brickGenerator.getRow();
+        generateNewRow();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -110,30 +110,22 @@ public class GameArea extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(ballColor);
-        for (int i = 0; i < balls.size(); i++) {
-            g.fillOval(balls.get(i).getPosX(), balls.get(i).getPosY(), balls.get(i).getWidth(), balls.get(i).getHeight());
+        for (GameObjects.ball ball : balls) {
+            g.fillOval(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight());
         }
-        g.setColor(new Color(0xB40228));
-        if(b[0]){
-            g.fillRect(0 ,0 ,60 , 60);
-        }
-        if(b[1]) {
-            g.fillRect(63, 0, 60, 60);
-        }
-        if(b[2]) {
-            g.fillRect(126, 0, 60, 60);
-        }
-        if(b[3]) {
-            g.fillRect(189, 0, 60, 60);
-        }
-        if(b[4]) {
-            g.fillRect(252, 0, 60, 60);
-        }
-        if(b[5]) {
-            g.fillRect(315, 0, 60, 60);
-        }
-        if(b[6]) {
-            g.fillRect(378, 0, 60, 60);
+
+        for (int i = 0; i < bricks.size(); i++) {
+            g.setColor(new Color(0xB40228));
+            g.fillRect(bricks.get(i).getPosX(), bricks.get(i).getPosY(), bricks.get(i).getWidth(), bricks.get(i).getHeight());
+
+            FontMetrics fm = g.getFontMetrics();
+            int stringWidth = SwingUtilities.computeStringWidth(fm, bricks.get(i).getNum() + "");
+
+            int centerX = (int) Math.round(bricks.get(i).getPosX() + bricks.get(i).getWidth() / 2.0 - stringWidth / 2.0);
+            int centerY = bricks.get(i).getPosY() + (int) Math.round(bricks.get(i).getHeight() / 2.0 + (fm.getHeight() / 4.0));
+
+            g.setColor(Color.WHITE);
+            g.drawString(bricks.get(i).getNum() + "", centerX, centerY);
         }
 
         if (aim && !launched) {
@@ -150,10 +142,37 @@ public class GameArea extends JPanel {
         balls.add(new ball(453 / 2 - 15, 700, 15, 15));
         ballCount = 1;
         ballStillRunning = false;
+        java.util.Timer timer2 = new Timer();
+        timer2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!launched && gameRunning && (bricks.getLast().getPosY() > 60)) {
+                    generateNewRow();
+                }
+            }
+        }, 1000, 1000);
+        startTimer();
+    }
+
+    public void pauseGame() {
+        if (gameRunning) {
+            gameRunning = false;
+            timer.cancel();
+        } else {
+            startTimer();
+            gameRunning = true;
+        }
+
+    }
+
+    public void startTimer() {
         timer = new java.util.Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (!launched) {
+                    constantDrop();
+                }
                 //Move ball
                 for (int i = 0; i < balls.size(); i++) {
                     if (balls.get(i).isReadyToMove()) {
@@ -180,64 +199,27 @@ public class GameArea extends JPanel {
                                 line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
                             }
                             ballCount++;
+                            dropAll();
                             save(score, ballCount);
                             launched = false;
                         }
-//                        repaint();
                     }
                 }
                 repaint();
             }
-        }, 10, 10);
+        }, 10, 15);
     }
 
-    public void pauseGame() {
-        if (gameRunning) {
-            gameRunning = false;
-            timer.cancel();
-        } else {
-            timer = new java.util.Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    //Move ball
-                    for (int i = 0; i < balls.size(); i++) {
-                        if (balls.get(i).isReadyToMove()) {
-                            balls.get(i).move();
-                            balls.get(i).checkCollisionWithWalls();
-                            //for bricks
-                            if (balls.get(i).checkCollisionWithFloor()) {
-                                balls.get(i).setMoving(false);
-                                balls.get(i).setReadyToMove(false);
-                            }
-                            ballStillRunning = false;
-                            for (GameObjects.ball ball : balls) {
-                                if (ball.isMoving()) {
-                                    ballStillRunning = true;
-                                    break;
-                                }
-                            }
-                            if (!ballStillRunning && launched) {
-                                balls.add(new ball(453 / 2 - 15, 700, 15, 15));
-                                for (int j = 1; j < balls.size(); j++) {
-                                    balls.get(j).setPosY(700);
-                                    balls.getFirst().setPosY(700);
-                                    balls.get(j).setPosX(balls.getFirst().getPosX());
-                                    line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
-                                }
-                                ballCount++;
-                                save(score, ballCount);
-                                launched = false;
-                            }
-//                        repaint();
-                        }
-                    }
-                    repaint();
-                }
-            }, 10, 10);
-            gameRunning = true;
+    public void dropAll() {
+        for (int i = 0; i < bricks.size(); i++) {
+            bricks.get(i).setPosY(bricks.get(i).getPosY() + 10 * difficulty);
         }
+    }
 
+    public void constantDrop() {
+        for (int i = 0; i < bricks.size(); i++) {
+            bricks.get(i).setPosY(bricks.get(i).getPosY() + difficulty);
+        }
     }
 
     private void fileStuff() {
@@ -286,5 +268,32 @@ public class GameArea extends JPanel {
         } catch (Exception e) {
 
         }
+    }
+
+    public void generateNewRow() {
+        brickGenerator.generate();
+        b = brickGenerator.getRow();
+        if (b[0]) {
+            bricks.add(new brick(0, 0, 60, 60, num));
+        }
+        if (b[1]) {
+            bricks.add(new brick(63, 0, 60, 60, num));
+        }
+        if (b[2]) {
+            bricks.add(new brick(126, 0, 60, 60, num));
+        }
+        if (b[3]) {
+            bricks.add(new brick(189, 0, 60, 60, num));
+        }
+        if (b[4]) {
+            bricks.add(new brick(252, 0, 60, 60, num));
+        }
+        if (b[5]) {
+            bricks.add(new brick(315, 0, 60, 60, num));
+        }
+        if (b[6]) {
+            bricks.add(new brick(378, 0, 60, 60, num));
+        }
+        num += difficulty;
     }
 }

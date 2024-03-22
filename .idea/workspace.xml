@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41ba47eb-07f1-4a71-8349-9589d124cefd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/brickGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/easyBrickGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/hardBrickGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/mediumBrickGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/prep.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/prep.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/brickGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/brickGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/easyBrickGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/easyBrickGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/hardBrickGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/hardBrickGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/mediumBrickGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/mediumBrickGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Panels/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
