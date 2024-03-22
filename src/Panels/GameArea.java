@@ -146,8 +146,14 @@ public class GameArea extends JPanel {
         timer2.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!launched && gameRunning && (bricks.getLast().getPosY() > 60)) {
-                    generateNewRow();
+                if (!launched && gameRunning) {
+                    if(bricks.isEmpty()){
+                        generateNewRow();
+                    }else{
+                        if(bricks.getLast().getPosY() > 60){
+                            generateNewRow();
+                        }
+                    }
                 }
             }
         }, 1000, 1000);
@@ -179,6 +185,17 @@ public class GameArea extends JPanel {
                         balls.get(i).move();
                         balls.get(i).checkCollisionWithWalls();
                         //for bricks
+                        for (int j = 0; j < bricks.size(); j++) {
+                            if(balls.get(i).checkCollisionWithBrick(bricks.get(j))){
+                                //num--
+                                balls.get(i).changeDir(bricks.get(j));
+                                bricks.get(j).setNum(bricks.get(j).getNum() - 1);
+                                if(bricks.get(j).getNum() <= 0){
+                                    bricks.remove(j);
+                                    j--;
+                                }
+                            }
+                        }
                         if (balls.get(i).checkCollisionWithFloor()) {
                             balls.get(i).setMoving(false);
                             balls.get(i).setReadyToMove(false);

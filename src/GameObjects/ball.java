@@ -1,10 +1,12 @@
 package GameObjects;
 
 
+import java.awt.*;
+
 public class ball extends GameObject {
     boolean isMoving;
     boolean isReadyToMove;
-    int speed = 7;
+    int speed = 5;
     int speedX;
     int speedY;
 
@@ -69,7 +71,7 @@ public class ball extends GameObject {
         }
     }
 
-    public boolean checkCollisionWithFloor(){
+    public boolean checkCollisionWithFloor() {
         if (posY >= 705) {
             speedY = -speedY;
             isMoving = false;
@@ -77,5 +79,30 @@ public class ball extends GameObject {
             return true;
         }
         return false;
+    }
+
+    public boolean checkCollisionWithBrick(brick brick) {
+        return (getPosX() + getWidth() > brick.getPosX()
+                && getPosY() + getHeight() > brick.getPosY()
+                && brick.getPosX() + brick.getWidth() > getPosX()
+                && brick.getPosY() + brick.getHeight() > getPosY());
+    }
+
+    public void changeDir(brick brick) {
+
+        double dx = brick.getPosX() + brick.getWidth() / 2.0 - (getPosX() + getWidth() / 2.0);
+        double dy = brick.getPosY() + brick.getHeight() / 2.0 - (getPosY() + getHeight() / 2.0);
+        double angle = Math.acos(dx / (Math.sqrt(dx * dx + dy * dy)));
+        if (angle <= Math.atan2(1, 1)) {
+            speedX = -Math.abs(speedX);//right
+        } else if (angle <= Math.PI - Math.atan2(1, 1)) {
+            if (dy > 0) {
+                speedY = -Math.abs(speedY);//down
+            } else {
+                speedY = Math.abs(speedY);//up
+            }
+        } else {
+            speedX = Math.abs(speedX);//left
+        }
     }
 }
