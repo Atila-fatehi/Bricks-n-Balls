@@ -16,20 +16,16 @@ import java.util.TimerTask;
 
 public class GameArea extends JPanel {
     int difficulty;
-    int red;
-    int green;
-    int blue;
+    int red;int green;int blue;
     Color ballColor;
-    int mouseX;
-    int mouseY;
+    int mouseX;int mouseY;
     int score;
-    final int WIDTH = 453;
-    final int HEIGHT = 900;
+    final int WIDTH = 453;final int HEIGHT = 900;
     Line line;
     ArrayList<ball> balls = new ArrayList<>();
     boolean aim;
     boolean gameRunning;
-    boolean ballStillRunning = false;
+    boolean ballStillRunning;
     boolean launched;
     java.util.Timer timer;
     int ballCount;
@@ -39,6 +35,7 @@ public class GameArea extends JPanel {
     boolean[] b;
     ArrayList<brick> bricks = new ArrayList<>();
     int num = 1;
+    int second = 0;
 
     public GameArea() {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
@@ -98,8 +95,8 @@ public class GameArea extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
                 double angle = Math.atan2(e.getY() - balls.getFirst().getPosY(), e.getX() - balls.getFirst().getPosX());
-                line.setX2((int) Math.round(Math.cos(angle) * 10000));
-                line.setY2((int) Math.round(Math.sin(angle) * 10000));
+                line.setX2((int) Math.round(Math.round(Math.cos(angle) * 10000)));
+                line.setY2((int) Math.round(Math.round(Math.sin(angle) * 10000)));
                 mouseX = e.getX();
                 mouseY = e.getY();
             }
@@ -137,6 +134,7 @@ public class GameArea extends JPanel {
     }
 
     public void startGame() {
+        second = 1;
         gameRunning = true;
         launched = false;
         balls.add(new ball(453 / 2 - 15, 700, 15, 15));
@@ -146,11 +144,12 @@ public class GameArea extends JPanel {
         timer2.schedule(new TimerTask() {
             @Override
             public void run() {
+                second++;
                 if (!launched && gameRunning) {
-                    if(bricks.isEmpty()){
+                    if (bricks.isEmpty()) {
                         generateNewRow();
-                    }else{
-                        if(bricks.getLast().getPosY() > 60){
+                    } else {
+                        if (bricks.getLast().getPosY() > 60) {
                             generateNewRow();
                         }
                     }
@@ -171,6 +170,8 @@ public class GameArea extends JPanel {
 
     }
 
+    int index = -1;
+
     public void startTimer() {
         timer = new java.util.Timer();
         timer.schedule(new TimerTask() {
@@ -186,11 +187,14 @@ public class GameArea extends JPanel {
                         balls.get(i).checkCollisionWithWalls();
                         //for bricks
                         for (int j = 0; j < bricks.size(); j++) {
-                            if(balls.get(i).checkCollisionWithBrick(bricks.get(j))){
+                            if (balls.get(i).checkCollisionWithBrick(bricks.get(j))) {
                                 //num--
                                 balls.get(i).changeDir(bricks.get(j));
                                 bricks.get(j).setNum(bricks.get(j).getNum() - 1);
-                                if(bricks.get(j).getNum() <= 0){
+                                if (bricks.get(j).getNum() <= 0) {
+                                    score += bricks.get(j).getStartingNum();
+                                    score -= second / 15;
+                                    save();
                                     bricks.remove(j);
                                     j--;
                                 }
@@ -199,6 +203,9 @@ public class GameArea extends JPanel {
                         if (balls.get(i).checkCollisionWithFloor()) {
                             balls.get(i).setMoving(false);
                             balls.get(i).setReadyToMove(false);
+                            if (index == -1) {
+                                index = i;
+                            }
                         }
                         ballStillRunning = false;
                         for (GameObjects.ball ball : balls) {
@@ -209,16 +216,18 @@ public class GameArea extends JPanel {
                         }
                         if (!ballStillRunning && launched) {
                             balls.add(new ball(453 / 2 - 15, 700, 15, 15));
-                            for (int j = 1; j < balls.size(); j++) {
+                            for (int j = 0; j < balls.size(); j++) {
                                 balls.get(j).setPosY(700);
-                                balls.getFirst().setPosY(700);
-                                balls.get(j).setPosX(balls.getFirst().getPosX());
-                                line.setX1(balls.getFirst().getPosX() + balls.getFirst().getWidth() / 2);
+                                if (j != index) {
+                                    balls.get(j).setPosX(balls.get(index).getPosX());
+                                }
+                                line.setX1(balls.get(index).getPosX() + balls.get(index).getWidth() / 2);
                             }
                             ballCount++;
                             dropAll();
-                            save(score, ballCount);
+                            save();
                             launched = false;
+                            index = -1;
                         }
                     }
                 }
@@ -275,7 +284,7 @@ public class GameArea extends JPanel {
         }
     }
 
-    public void save(int a, int b) {
+    public void save() {
         try {
             printWriter = new PrintWriter(file);
             printWriter.println(score);

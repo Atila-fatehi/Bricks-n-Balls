@@ -2,6 +2,7 @@ package Thread;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -33,8 +34,10 @@ public class myThread extends Thread {
             if (file.exists()) {
                 try {
                     Scanner scanner = new Scanner(file);
-                    score.setText("Score : " + scanner.nextLine());
-                    ballCount.setText("ball count : " + scanner.nextLine());
+                    String s1 = scanner.nextLine();
+                    String s2 = scanner.nextLine();
+                    score.setText("Score : " + s1);
+                    ballCount.setText("ball count : " + s2);
                 } catch (Exception e) {
 
                 }

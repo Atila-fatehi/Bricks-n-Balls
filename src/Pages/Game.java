@@ -71,28 +71,6 @@ public class Game extends JFrame {
 
         final myThread myThread = new myThread(time , score , ballCount);
         myThread.start();
-//        java.util.Timer seconds = new Timer();
-//        seconds.schedule(new TimerTask() {
-//            int s = 0;
-//
-//            @Override
-//            public void run() {
-//                s++;
-//                time.setText(String.valueOf(s));
-//                File file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
-//                if (file.exists()) {
-//                    try {
-//                        Scanner scanner = new Scanner(file);
-//                        score.setText("Score : " + scanner.nextLine());
-//                        ballCount.setText("ball count : " + scanner.nextLine());
-//                    } catch (Exception e) {
-//
-//                    }
-//                } else {
-//
-//                }
-//            }
-//        }, 1000, 1000);
         ImageIcon x = new ImageIcon(Paths.get("").toAbsolutePath() + "\\src\\images\\pause.png");
         Image img = x.getImage();
         Image newimg = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
