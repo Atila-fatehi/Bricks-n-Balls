@@ -1,13 +1,25 @@
 package GameObjects;
 
-public class brick extends GameObject{
+import java.awt.*;
 
+public class brick extends GameObject {
+    Color color;
     int num;
     int startingNum;
-    public brick(int posX, int posY, int width, int height , int num) {
+
+    public brick(int posX, int posY, int width, int height, int num) {
         super(posX, posY, width, height);
         this.num = num;
         this.startingNum = num;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public brick(int posX, int posY, int width, int height , Color color) {
+        super(posX, posY, width, height);
+        this.color = color;
     }
 
     public int getStartingNum() {

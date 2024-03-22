@@ -7,11 +7,8 @@
     <list default="true" id="41ba47eb-07f1-4a71-8349-9589d124cefd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataBase/prep.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/prep.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameObjects/brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Panels/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Thread/myThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Thread/myThread.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
