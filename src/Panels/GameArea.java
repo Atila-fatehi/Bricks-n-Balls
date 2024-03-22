@@ -40,6 +40,11 @@ public class GameArea extends JPanel {
     int num = 1;
     int second = 0;
     boolean speedBoosted = false;
+    boolean powerBoosted = false;
+    boolean dizzy = false;
+    int power = 1;
+    double angle;
+
 
     public GameArea() {
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
@@ -91,6 +96,7 @@ public class GameArea extends JPanel {
                         balls.get(i).setSpeedX((int) Math.round(balls.getFirst().getSpeed() * Math.cos(angle)));
                         balls.get(i).setSpeedY((int) Math.round(balls.getFirst().getSpeed() * Math.sin(angle)));
                     }
+                    dizzy = false;
                 }
             }
         });
@@ -98,9 +104,17 @@ public class GameArea extends JPanel {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                double angle = Math.atan2(e.getY() - balls.getFirst().getPosY(), e.getX() - balls.getFirst().getPosX());
-                line.setX2((int) Math.round(Math.round(Math.cos(angle) * 10000)));
-                line.setY2((int) Math.round(Math.round(Math.sin(angle) * 10000)));
+                angle = Math.atan2(e.getY() - balls.getFirst().getPosY(), e.getX() - balls.getFirst().getPosX());
+                line.setX2((int) Math.round(Math.round(Math.cos(angle) * 50000)));
+                line.setY2((int) Math.round(Math.round(Math.sin(angle) * 50000)));
+                if(dizzy){
+                    if(new Random().nextBoolean()) {
+                        line.setX2((int) Math.round(Math.random() * 50000));
+                    }else{
+                        line.setX2((int) -Math.round(Math.random() * 50000));
+                    }
+                    line.setY2((int) -Math.round(Math.random() * 50000));
+                }
                 mouseX = e.getX();
                 mouseY = e.getY();
             }
@@ -198,7 +212,7 @@ public class GameArea extends JPanel {
                             if (balls.get(i).checkCollisionWithBrick(bricks.get(j))) {
                                 //num--
                                 balls.get(i).changeDir(bricks.get(j));
-                                bricks.get(j).setNum(bricks.get(j).getNum() - 1);
+                                bricks.get(j).setNum(bricks.get(j).getNum() - power);
                                 if (bricks.get(j).getNum() <= 0) {
                                     score += bricks.get(j).getStartingNum();
                                     score -= second / 15;
@@ -218,7 +232,7 @@ public class GameArea extends JPanel {
                                 } else if (Item.get(j).getColor() == Color.YELLOW) {
                                     if (!speedBoosted) {
                                         for (int k = 0; k < balls.size(); k++) {
-                                            balls.get(k).setSpeed(2 * balls.get(k).getSpeed());
+                                            balls.get(k).setSpeed(10);
                                             balls.get(k).setSpeedX(2 * balls.get(k).getSpeedX());
                                             balls.get(k).setSpeedY(2 * balls.get(k).getSpeedY());
                                         }
@@ -229,7 +243,7 @@ public class GameArea extends JPanel {
                                         @Override
                                         public void run() {
                                             for (int k = 0; k < balls.size(); k++) {
-                                                balls.get(k).setSpeed(balls.get(k).getSpeed() / 2);
+                                                balls.get(k).setSpeed(5);
                                             }
                                             speedBoosted = false;
                                             timer1.cancel();
@@ -238,13 +252,34 @@ public class GameArea extends JPanel {
                                     Item.remove(j);
                                     j--;
                                 } else if (Item.get(j).getColor() == Color.MAGENTA) {
-                                    System.out.println("godrat");
+                                    if (!powerBoosted) {
+                                        power = 2;
+                                        powerBoosted = true;
+                                    }
+                                    java.util.Timer timer1 = new Timer();
+                                    timer1.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            power = 1;
+                                            powerBoosted = false;
+                                            timer1.cancel();
+                                        }
+                                    }, 15000, 1);
+
+                                    Item.remove(j);
+                                    j--;
                                 } else if (Item.get(j).getColor() == Color.GRAY) {
-                                    System.out.println("SARGIJE");
+                                    dizzy = true;
+                                    Item.remove(j);
+                                    j--;
                                 } else if (Item.get(j).getColor() == Color.PINK) {
-                                    System.out.println("reverse");
+                                    reverse();
+                                    Item.remove(j);
+                                    j--;
                                 } else if (Item.get(j).getColor() == Color.RED) {
-                                    System.out.println("heart");
+
+                                    Item.remove(j);
+                                    j--;
                                 }
                             }
                         }
@@ -287,6 +322,14 @@ public class GameArea extends JPanel {
         }, 10, 15);
     }
 
+    public void reverse(){
+        for (int i = 0; i < bricks.size(); i++) {
+            bricks.get(i).setPosY(bricks.get(i).getPosY() - 120);
+        }
+        for (int i = 0; i < Item.size(); i++) {
+            Item.get(i).setPosY(Item.get(i).getPosY() - 120);
+        }
+    }
     public void dropAll() {
         for (int i = 0; i < bricks.size(); i++) {
             bricks.get(i).setPosY(bricks.get(i).getPosY() + 10 * difficulty);
@@ -384,32 +427,30 @@ public class GameArea extends JPanel {
                     //common
                     Item.add(new brick(63 * i + 25, 25, 15, 15, Color.WHITE));
                     break;
+                } else if (new Random().nextBoolean()) {
+                    int rand = new Random().nextInt(12);
+                    if (rand == 0) {
+                        //speed
+                        Item.add(new brick(63 * i + 25, 25, 15, 15, Color.YELLOW));
+                    }
+                    if (rand == 1) {
+                        //power
+                        Item.add(new brick(63 * i + 25, 25, 15, 15, Color.MAGENTA));
+                    }
+                    if (rand == 2) {
+                        //dizzy
+                        Item.add(new brick(63 * i + 25, 25, 15, 15, Color.GRAY));
+                    }
+                    if (rand == 3) {
+                        //reverse
+                        Item.add(new brick(63 * i + 25, 25, 15, 15, Color.PINK));
+                    }
+                    if (rand == 4) {
+                        //heart
+                        Item.add(new brick(63 * i + 25, 25, 15, 15, Color.RED));
+                    }
                 }
-                if (new Random().nextInt(10) == 0) {
-                    //speed
-                    Item.add(new brick(63 * i + 25, 25, 15, 15, Color.YELLOW));
-                    break;
-                }
-                if (new Random().nextInt(5) == 0) {
-                    //power
-                    Item.add(new brick(63 * i + 25, 25, 15, 15, Color.MAGENTA));
-                    break;
-                }
-                if (new Random().nextInt(4) == 0) {
-                    //dizzy
-                    Item.add(new brick(63 * i + 25, 25, 15, 15, Color.GRAY));
-                    break;
-                }
-                if (new Random().nextInt(4) == 0) {
-                    //reverse
-                    Item.add(new brick(63 * i + 25, 25, 15, 15, Color.PINK));
-                    break;
-                }
-                if (new Random().nextInt(4) == 0) {
-                    //heart
-                    Item.add(new brick(63 * i + 25, 25, 15, 15, Color.RED));
-                    break;
-                }
+
             }
         }
 
