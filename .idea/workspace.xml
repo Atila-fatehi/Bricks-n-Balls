@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/prep.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/prep.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/brick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Panels/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -11,10 +11,20 @@ public class brick extends GameObject {
         super(posX, posY, width, height);
         this.num = num;
         this.startingNum = num;
+        this.color = new Color(0xB40228);
     }
-
+    public brick(int posX, int posY, int width, int height, int num , Color color) {
+        super(posX, posY, width, height);
+        this.num = num;
+        this.startingNum = num;
+        this.color = color;
+    }
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public brick(int posX, int posY, int width, int height , Color color) {
