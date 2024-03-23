@@ -3,6 +3,7 @@ package Panels;
 import GameObjects.*;
 import Graphic.Line;
 import Music.AudioPlayer;
+import Pages.StartPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,8 +52,19 @@ public class GameArea extends JPanel {
     int explosionX = 0;
     int explosionY = 0;
     int explosionR = 0;
+    boolean gameOver = false;
+    int answer = -2;
+
+    public int getAnswer() {
+        return answer;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
 
     public GameArea() {
+        gameOver = false;
         audioPlayer = new AudioPlayer();
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
         setFocusable(true);
@@ -137,9 +149,9 @@ public class GameArea extends JPanel {
             explosionR += 2;
             explosionX -= 1;
             explosionY -= 1;
-            if(explosionR == 120){
+            if (explosionR == 120) {
                 explode = false;
-                explosionR = 0 ;
+                explosionR = 0;
             }
         }
         if (lightDance) {
@@ -240,8 +252,19 @@ public class GameArea extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!launched) {
+                if (!launched && gameRunning) {
                     constantDrop();
+                }
+                for (int i = 0; i < bricks.size(); i++) {
+                    if (bricks.get(i).getPosY() >= 660) {
+                        gameRunning = false;
+                        setVisible(false);
+                        String[] responses = {"Play Again", "Game Prep Page", "Main Menu"};
+                        answer = JOptionPane.showOptionDialog(null, "Game Over!! Choose one : ", "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responses, 0);
+                        gameOver = true;
+                        timer.cancel();
+                        break;
+                    }
                 }
                 //Move ball
                 for (int i = 0; i < balls.size(); i++) {
@@ -291,20 +314,20 @@ public class GameArea extends JPanel {
                                         }, 10000, 1);
                                     } else if (bricks.get(j).getColor() == Color.ORANGE) {
                                         audioPlayer.explosion();
-                                        explosionX = bricks.get(j).getPosX() + bricks.get(j).getWidth()/2;
-                                        explosionY = bricks.get(j).getPosY() + bricks.get(j).getHeight()/2;
+                                        explosionX = bricks.get(j).getPosX() + bricks.get(j).getWidth() / 2;
+                                        explosionY = bricks.get(j).getPosY() + bricks.get(j).getHeight() / 2;
                                         explode = true;
                                         for (int k = 0; k < bricks.size(); k++) {
-                                           if(new ball(bricks.get(j).getPosX() - 30, bricks.get(j).getPosY() - 30, 120 , 120).checkCollisionWithBrick(bricks.get(k))){
-                                               bricks.get(k).setNum(bricks.get(k).getNum() - 50);
-                                           }
+                                            if (new ball(bricks.get(j).getPosX() - 30, bricks.get(j).getPosY() - 30, 120, 120).checkCollisionWithBrick(bricks.get(k))) {
+                                                bricks.get(k).setNum(bricks.get(k).getNum() - 50);
+                                            }
                                         }
                                     }
                                     bricks.remove(j);
                                     j--;
                                 }
                                 for (int k = 0; k < bricks.size(); k++) {
-                                    if(bricks.get(k).getNum() <= 0){
+                                    if (bricks.get(k).getNum() <= 0) {
                                         bricks.remove(k);
                                         k--;
                                     }
@@ -340,8 +363,8 @@ public class GameArea extends JPanel {
                                             if (ballStillRunning) {
                                                 for (int k = 0; k < balls.size(); k++) {
                                                     balls.get(k).setSpeed(6);
-                                                    balls.get(k).setSpeedX((int)Math.round(balls.get(k).getSpeedX() / 2.0));
-                                                    balls.get(k).setSpeedY((int)Math.round(balls.get(k).getSpeedY() / 2.0));
+                                                    balls.get(k).setSpeedX((int) Math.round(balls.get(k).getSpeedX() / 2.0));
+                                                    balls.get(k).setSpeedY((int) Math.round(balls.get(k).getSpeedY() / 2.0));
                                                 }
                                             }
                                             speedBoosted = false;
@@ -639,5 +662,9 @@ public class GameArea extends JPanel {
         }
 
 
+    }
+
+    public void setGameRunning(boolean b) {
+        gameRunning = false;
     }
 }

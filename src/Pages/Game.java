@@ -20,7 +20,7 @@ import Thread.myThread;
 public class Game extends JFrame {
     final int SCREEN_WIDTH = 453;
     final int SCREEN_HEIGHT = 900;
-    boolean gameRunning = true;
+    boolean gameOver = false;
 
     public Game(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
@@ -69,7 +69,7 @@ public class Game extends JFrame {
         ballCount.setBounds(150, 7, 400, 56);
         ballCount.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
 
-        final myThread myThread = new myThread(time , score , ballCount);
+        final myThread myThread = new myThread(time, score, ballCount);
         myThread.start();
         ImageIcon x = new ImageIcon(Paths.get("").toAbsolutePath() + "\\src\\images\\pause.png");
         Image img = x.getImage();
@@ -97,8 +97,9 @@ public class Game extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
                 myThread.stopThread();
+                gameArea.setGameRunning(false);
+                dispose();
                 new StartPage(musicPlayer);
             }
         });
@@ -107,11 +108,34 @@ public class Game extends JFrame {
         topPanel.add(pause);
         bottomPanel.add(ballCount);
 
+        java.util.Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (gameArea.isGameOver()) {
+                    dispose();
+                    int answer = gameArea.getAnswer();
+                    if (answer == -1 || answer == 2) {
+                        dispose();
+                        new StartPage(musicPlayer);
+                    } else if (answer == 0) {
+                        dispose();
+                        new Game(musicPlayer);
+                    } else if (answer == 1) {
+                        dispose();
+                        new GamePrepPage(musicPlayer);
+                    }
+                    timer.cancel();
+                }
+            }
+        }, 0, 100);
 
         //add
         add(topPanel);
         add(bottomPanel);
-
+        repaint();
+        repaint();
+        repaint();
     }
 
 

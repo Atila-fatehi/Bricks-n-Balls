@@ -23,7 +23,7 @@ public class GamePrepPage extends JFrame {
     Color color = Color.BLACK;
 
     public GamePrepPage(MusicPlayer musicPlayer) {
-
+        setFocusable(true);
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\prep.txt");
         if (file.exists()) {
             try {
@@ -70,6 +70,8 @@ public class GamePrepPage extends JFrame {
         label.setBounds(200, 50, 300, 50);
         label.setFont(new Font("HelveticaNeue-CondensedBlack", Font.BOLD, 25));
         label.setForeground(new Color(0x002A5A));
+        label.setFocusable(true);
+        label.setText("Choose Difficulty : ");
         add(label);
 
 
@@ -94,7 +96,7 @@ public class GamePrepPage extends JFrame {
             }
         });
         add(easy);
-
+//
         JCheckBox medium = new JCheckBox("Medium");
         medium.setBounds(270, 110, 200, 50);
         medium.setFocusable(false);
@@ -163,6 +165,7 @@ public class GamePrepPage extends JFrame {
 
 
         JLabel label2 = new JLabel("Choose Ball's Color : ");
+        label2.setText("Choose Ball's Color : ");
         label2.setHorizontalAlignment(JLabel.CENTER);
         label2.setHorizontalTextPosition(JLabel.CENTER);
         label2.setBounds(200, 260, 300, 50);
@@ -171,6 +174,7 @@ public class GamePrepPage extends JFrame {
         add(label2);
 
         JButton button3 = new JButton("Choose");
+        button3.setText("Choose");
         button3.setBounds(200, 320, 300, 50);
         button3.setFocusable(false);
         button3.setHorizontalAlignment(JButton.CENTER);
@@ -186,9 +190,13 @@ public class GamePrepPage extends JFrame {
                 JColorChooser colorChooser = new JColorChooser();
                 color = JColorChooser.showDialog(null, "Pick a color", Color.WHITE);
 //                System.out.println(color.toString());
-                red = color.getRed();
-                green = color.getGreen();
-                blue = color.getBlue();
+                try {
+                    red = color.getRed();
+                    green = color.getGreen();
+                    blue = color.getBlue();
+                }catch (Exception ee){
+
+                }
                 try {
                     save(difficulty , red , green ,blue , name);
                 } catch (FileNotFoundException ex) {
@@ -199,6 +207,7 @@ public class GamePrepPage extends JFrame {
         });
 
         JLabel label3 = new JLabel("Enter Your Name : ");
+        label3.setText("Enter Your Name : ");
         label3.setHorizontalAlignment(JLabel.CENTER);
         label3.setHorizontalTextPosition(JLabel.CENTER);
         label3.setBounds(200, 460, 300, 50);
@@ -214,6 +223,7 @@ public class GamePrepPage extends JFrame {
         add(textField);
 
         JButton button2 = new JButton("Start Game");
+        button2.setText("Start Game");
         button2.setBounds(200, 710, 300, 50);
         button2.setFocusable(false);
         button2.setHorizontalAlignment(JButton.CENTER);
@@ -237,6 +247,7 @@ public class GamePrepPage extends JFrame {
         });
 
         JButton button1 = new JButton("Back");
+        button1.setText("Back");
         button1.setBounds(200, 770, 300, 50);
         button1.setFocusable(false);
         button1.setHorizontalAlignment(JButton.CENTER);
@@ -252,6 +263,9 @@ public class GamePrepPage extends JFrame {
                 new StartPage(musicPlayer);
             }
         });
+        repaint();
+        repaint();
+        repaint();
     }
 
     @Override
