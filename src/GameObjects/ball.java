@@ -6,7 +6,7 @@ import java.awt.*;
 public class ball extends GameObject {
     boolean isMoving;
     boolean isReadyToMove;
-    int speed = 5;
+    int speed = 6;
     int speedX;
     int speedY;
 

@@ -2,6 +2,7 @@ package Panels;
 
 import GameObjects.*;
 import Graphic.Line;
+import Music.AudioPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,8 +46,14 @@ public class GameArea extends JPanel {
     int power = 1;
     double angle;
     boolean lightDance = false;
+    AudioPlayer audioPlayer;
+    boolean explode = false;
+    int explosionX = 0;
+    int explosionY = 0;
+    int explosionR = 0;
 
     public GameArea() {
+        audioPlayer = new AudioPlayer();
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
         setFocusable(true);
         try {
@@ -113,7 +120,7 @@ public class GameArea extends JPanel {
                     } else {
                         line.setX2((int) -Math.round(Math.random() * 50000));
                     }
-                    line.setY2((int) -Math.round(Math.random() * 50000));
+                    line.setY2((int) -Math.round(Math.random() * 50000) - 5000);
                 }
                 mouseX = e.getX();
                 mouseY = e.getY();
@@ -124,15 +131,25 @@ public class GameArea extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (explode) {
+            g.setColor(Color.ORANGE);
+            g.fillOval(explosionX, explosionY, explosionR, explosionR);
+            explosionR += 2;
+            explosionX -= 1;
+            explosionY -= 1;
+            if(explosionR == 120){
+                explode = false;
+                explosionR = 0 ;
+            }
+        }
         if (lightDance) {
             g.setColor(new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
         } else {
             g.setColor(ballColor);
         }
-        for (GameObjects.ball ball : balls) {
-            g.fillOval(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight());
+        for (int i = 0; i < balls.size(); i++) {
+            g.fillOval(balls.get(i).getPosX(), balls.get(i).getPosY(), balls.get(i).getWidth(), balls.get(i).getHeight());
         }
-
         for (int i = 0; i < bricks.size(); i++) {
             if (bricks.get(i).getColor() == Color.MAGENTA) {
                 g.setColor(new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
@@ -273,10 +290,24 @@ public class GameArea extends JPanel {
                                             }
                                         }, 10000, 1);
                                     } else if (bricks.get(j).getColor() == Color.ORANGE) {
-
+                                        audioPlayer.explosion();
+                                        explosionX = bricks.get(j).getPosX() + bricks.get(j).getWidth()/2;
+                                        explosionY = bricks.get(j).getPosY() + bricks.get(j).getHeight()/2;
+                                        explode = true;
+                                        for (int k = 0; k < bricks.size(); k++) {
+                                           if(new ball(bricks.get(j).getPosX() - 30, bricks.get(j).getPosY() - 30, 120 , 120).checkCollisionWithBrick(bricks.get(k))){
+                                               bricks.get(k).setNum(bricks.get(k).getNum() - 50);
+                                           }
+                                        }
                                     }
                                     bricks.remove(j);
                                     j--;
+                                }
+                                for (int k = 0; k < bricks.size(); k++) {
+                                    if(bricks.get(k).getNum() <= 0){
+                                        bricks.remove(k);
+                                        k--;
+                                    }
                                 }
                             }
                         }
@@ -304,7 +335,14 @@ public class GameArea extends JPanel {
                                         @Override
                                         public void run() {
                                             for (int k = 0; k < balls.size(); k++) {
-                                                balls.get(k).setSpeed(5);
+                                                balls.get(k).setSpeed(6);
+                                            }
+                                            if (ballStillRunning) {
+                                                for (int k = 0; k < balls.size(); k++) {
+                                                    balls.get(k).setSpeed(6);
+                                                    balls.get(k).setSpeedX((int)Math.round(balls.get(k).getSpeedX() / 2.0));
+                                                    balls.get(k).setSpeedY((int)Math.round(balls.get(k).getSpeedY() / 2.0));
+                                                }
                                             }
                                             speedBoosted = false;
                                             timer1.cancel();
@@ -382,7 +420,9 @@ public class GameArea extends JPanel {
             }
         }, 10, 15);
     }
+
     int rate = -2;
+
     public void changeSize() {
         for (int i = 0; i < bricks.size(); i++) {
             bricks.get(i).setWidth(bricks.get(i).getWidth() + rate);
@@ -476,9 +516,9 @@ public class GameArea extends JPanel {
         b = brickGenerator.getRow();
         int width = 60;
         int height = 60;
-        if(!bricks.isEmpty()){
-         width = bricks.getFirst().getWidth();
-         height = bricks.getFirst().getHeight();
+        if (!bricks.isEmpty()) {
+            width = bricks.getFirst().getWidth();
+            height = bricks.getFirst().getHeight();
         }
         if (b[0]) {
             bricks.add(new brick(0, 0, width, height, num));
@@ -493,7 +533,7 @@ public class GameArea extends JPanel {
             }
         }
         if (b[1]) {
-            bricks.add(new brick(63, 0,width, height, num));
+            bricks.add(new brick(63, 0, width, height, num));
             if (new Random().nextInt(25) == 0) {
                 bricks.getLast().setColor(Color.MAGENTA);
             } else if (new Random().nextInt(20) == 0) {
