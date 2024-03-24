@@ -54,6 +54,8 @@ public class GameArea extends JPanel {
     int explosionR = 0;
     boolean gameOver = false;
     int answer = -2;
+    boolean heartHasAppeared = false;
+    boolean extraLife = false;
 
     public int getAnswer() {
         return answer;
@@ -114,6 +116,9 @@ public class GameArea extends JPanel {
                     for (int i = 0; i < balls.size(); i++) {
                         balls.get(i).setSpeedX((int) Math.round(balls.getFirst().getSpeed() * Math.cos(angle)));
                         balls.get(i).setSpeedY((int) Math.round(balls.getFirst().getSpeed() * Math.sin(angle)));
+                        if(balls.get(i).getSpeedY() == 0){
+                            balls.get(i).setSpeedY(1);
+                        }
                     }
                     dizzy = false;
                 }
@@ -257,13 +262,19 @@ public class GameArea extends JPanel {
                 }
                 for (int i = 0; i < bricks.size(); i++) {
                     if (bricks.get(i).getPosY() >= 660) {
-                        gameRunning = false;
-                        setVisible(false);
-                        String[] responses = {"Play Again", "Game Prep Page", "Main Menu"};
-                        answer = JOptionPane.showOptionDialog(null, "Game Over!! Choose one : ", "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responses, 0);
-                        gameOver = true;
-                        timer.cancel();
-                        break;
+                        if (extraLife) {
+                            extraLife = false;
+                            bricks.remove(i);
+                            i--;
+                        } else {
+                            gameRunning = false;
+                            setVisible(false);
+                            String[] responses = {"Play Again", "Game Prep Page", "Main Menu"};
+                            answer = JOptionPane.showOptionDialog(null, "Your Score = " + score + ", Choose one : ", "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responses, 0);
+                            gameOver = true;
+                            timer.cancel();
+                            break;
+                        }
                     }
                 }
                 //Move ball
@@ -365,6 +376,10 @@ public class GameArea extends JPanel {
                                                     balls.get(k).setSpeed(6);
                                                     balls.get(k).setSpeedX((int) Math.round(balls.get(k).getSpeedX() / 2.0));
                                                     balls.get(k).setSpeedY((int) Math.round(balls.get(k).getSpeedY() / 2.0));
+                                                    if (balls.get(k).getSpeedY() == 0) {
+                                                        balls.get(k).setSpeedY(1);
+                                                    }
+
                                                 }
                                             }
                                             speedBoosted = false;
@@ -399,7 +414,7 @@ public class GameArea extends JPanel {
                                     Item.remove(j);
                                     j--;
                                 } else if (Item.get(j).getColor() == Color.RED) {
-
+                                    extraLife = true;
                                     Item.remove(j);
                                     j--;
                                 }
@@ -451,11 +466,13 @@ public class GameArea extends JPanel {
             bricks.get(i).setWidth(bricks.get(i).getWidth() + rate);
             bricks.get(i).setHeight(bricks.get(i).getHeight() + rate);
         }
-        if (bricks.getFirst().getWidth() <= 40) {
-            rate = 2;
-        }
-        if (bricks.getFirst().getWidth() >= 60) {
-            rate = -2;
+        if(!bricks.isEmpty()) {
+            if (bricks.getFirst().getWidth() <= 40) {
+                rate = 2;
+            }
+            if (bricks.getFirst().getWidth() >= 60) {
+                rate = -2;
+            }
         }
     }
 
@@ -652,16 +669,14 @@ public class GameArea extends JPanel {
                         //reverse
                         Item.add(new brick(63 * i + 25, 25, 15, 15, Color.PINK));
                     }
-                    if (rand == 4) {
+                    if (rand == 4 && !heartHasAppeared) {
                         //heart
                         Item.add(new brick(63 * i + 25, 25, 15, 15, Color.RED));
+                        heartHasAppeared = true;
                     }
                 }
-
             }
         }
-
-
     }
 
     public void setGameRunning(boolean b) {
