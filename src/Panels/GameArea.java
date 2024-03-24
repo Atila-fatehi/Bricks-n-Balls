@@ -66,10 +66,12 @@ public class GameArea extends JPanel {
     }
 
     public void setPlayerName(String playerName) {
-        if(playerName.isEmpty()){
-            playerName = "-";
+        try {
+            this.PlayerName = playerName;
+        } catch (Exception e) {
+            this.PlayerName = "-";
         }
-        this.PlayerName = playerName;
+
     }
 
     public int getAnswer() {
@@ -290,19 +292,40 @@ public class GameArea extends JPanel {
                             i--;
                         } else {
                             history.add(new data(PlayerName, score, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
-//
-                            File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
-                            try (FileOutputStream fileOut = new FileOutputStream(fileSave);
-                                 ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
-                                objOut.writeObject(history);
-                            } catch (IOException e) {
+                            File setting = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\settings.txt");
+                            if(setting.exists()){
+                                try {
+                                    Scanner scanner = new Scanner(setting);
+                                    scanner.nextLine();
+                                    scanner.nextLine();
+                                    if(scanner.nextLine().equals("1")){
+                                        File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
+                                        try (FileOutputStream fileOut = new FileOutputStream(fileSave);
+                                             ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
+                                            objOut.writeObject(history);
+                                        } catch (IOException e) {
 
+                                        }
+                                    }
+                                }catch (Exception e){
+
+                                }
+
+                            }else{
+                                File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
+                                try (FileOutputStream fileOut = new FileOutputStream(fileSave);
+                                     ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
+                                    objOut.writeObject(history);
+                                } catch (IOException e) {
+
+                                }
                             }
                             //
                             gameRunning = false;
                             setVisible(false);
                             String[] responses = {"Play Again", "Game Prep Page", "Main Menu"};
                             answer = JOptionPane.showOptionDialog(null, "Your Score = " + score + ", Choose one : ", "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responses, 0);
+
                             gameOver = true;
                             timer.cancel();
                             break;
@@ -371,6 +394,7 @@ public class GameArea extends JPanel {
                                 }
                                 for (int k = 0; k < bricks.size(); k++) {
                                     if (bricks.get(k).getNum() <= 0) {
+                                        score += bricks.get(k).getStartingNum();
                                         bricks.remove(k);
                                         k--;
                                     }

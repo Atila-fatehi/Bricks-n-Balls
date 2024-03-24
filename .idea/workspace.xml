@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41ba47eb-07f1-4a71-8349-9589d124cefd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/DataBase/data.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/gameStatus.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataBase/history.ser" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBase/prep.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/prep.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataBase/settings.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBase/settings.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pages/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/GamePrepPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pages/HistoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pages/HistoryPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Panels/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Panels/GameArea.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,9 +27,22 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="serialize" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="serialize" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,7 +60,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "serialize",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/Asus/Desktop/swipe-brick-breaker-master/src",
     "onboarding.tips.debug.path": "C:/Users/Asus/Desktop/AP-2/src/Main.java"
   }
@@ -63,6 +75,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>

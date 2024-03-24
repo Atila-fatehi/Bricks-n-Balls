@@ -20,6 +20,7 @@ public class MusicPlayer {
                     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(Paths.get("").toAbsolutePath() + "\\src\\Music\\Theme.wav").getAbsoluteFile());
                     clip = AudioSystem.getClip();
                     clip.open(audioInputStream);
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
                     clip.start();
                 }
             } catch (FileNotFoundException e) {

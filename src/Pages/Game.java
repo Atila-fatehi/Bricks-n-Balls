@@ -132,7 +132,7 @@ public class Game extends JFrame {
                         new StartPage(musicPlayer);
                     } else if (answer == 0) {
                         dispose();
-                        new Game(musicPlayer);
+                        new Game(musicPlayer).setPlayerName(PlayerName);
                     } else if (answer == 1) {
                         dispose();
                         new GamePrepPage(musicPlayer);
