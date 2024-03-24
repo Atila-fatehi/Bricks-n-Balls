@@ -242,7 +242,8 @@ public class GamePrepPage extends JFrame {
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
-                new Game(musicPlayer);
+                Game game = new Game(musicPlayer);
+                game.setPlayerName(name);
             }
         });
 

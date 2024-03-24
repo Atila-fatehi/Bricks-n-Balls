@@ -21,7 +21,17 @@ public class Game extends JFrame {
     final int SCREEN_WIDTH = 453;
     final int SCREEN_HEIGHT = 900;
     boolean gameOver = false;
+    String PlayerName;
 
+    public String getPlayerName() {
+        return PlayerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        PlayerName = playerName;
+        gameArea.setPlayerName(playerName);
+    }
+    GameArea gameArea;
     public Game(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("Brick Breaker +");
@@ -32,9 +42,11 @@ public class Game extends JFrame {
         setVisible(true);
         setResizable(false);
         //game area
-        GameArea gameArea = new GameArea();
+        gameArea = new GameArea();
         gameArea.setBackground(new Color(0xA6C8EA));
         gameArea.setBounds(0, 70, 600, 720);
+
+        gameArea.setPlayerName(PlayerName);
         add(gameArea);
 
         //Top Panel for pause , time , score

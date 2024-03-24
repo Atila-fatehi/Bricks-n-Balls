@@ -1,5 +1,6 @@
 package Panels;
 
+import DataBase.data;
 import GameObjects.*;
 import Graphic.Line;
 import Music.AudioPlayer;
@@ -8,13 +9,15 @@ import Pages.StartPage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Timer;
 
 public class GameArea extends JPanel {
+    ArrayList<data> history = new ArrayList<>();
     int difficulty;
     int red;
     int green;
@@ -56,6 +59,18 @@ public class GameArea extends JPanel {
     int answer = -2;
     boolean heartHasAppeared = false;
     boolean extraLife = false;
+    String PlayerName;
+
+    public String getPlayerName() {
+        return PlayerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        if(playerName.isEmpty()){
+            playerName = "-";
+        }
+        this.PlayerName = playerName;
+    }
 
     public int getAnswer() {
         return answer;
@@ -66,6 +81,13 @@ public class GameArea extends JPanel {
     }
 
     public GameArea() {
+        File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
+        try (FileInputStream fileIn = new FileInputStream(fileSave);
+             ObjectInputStream objIn = new ObjectInputStream(fileIn)) {
+            history = (ArrayList<data>) objIn.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+
+        }
         gameOver = false;
         audioPlayer = new AudioPlayer();
         file = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\gameStatus.txt");
@@ -116,7 +138,7 @@ public class GameArea extends JPanel {
                     for (int i = 0; i < balls.size(); i++) {
                         balls.get(i).setSpeedX((int) Math.round(balls.getFirst().getSpeed() * Math.cos(angle)));
                         balls.get(i).setSpeedY((int) Math.round(balls.getFirst().getSpeed() * Math.sin(angle)));
-                        if(balls.get(i).getSpeedY() == 0){
+                        if (balls.get(i).getSpeedY() == 0) {
                             balls.get(i).setSpeedY(1);
                         }
                     }
@@ -267,6 +289,16 @@ public class GameArea extends JPanel {
                             bricks.remove(i);
                             i--;
                         } else {
+                            history.add(new data(PlayerName, score, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+//
+                            File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
+                            try (FileOutputStream fileOut = new FileOutputStream(fileSave);
+                                 ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
+                                objOut.writeObject(history);
+                            } catch (IOException e) {
+
+                            }
+                            //
                             gameRunning = false;
                             setVisible(false);
                             String[] responses = {"Play Again", "Game Prep Page", "Main Menu"};
@@ -466,7 +498,7 @@ public class GameArea extends JPanel {
             bricks.get(i).setWidth(bricks.get(i).getWidth() + rate);
             bricks.get(i).setHeight(bricks.get(i).getHeight() + rate);
         }
-        if(!bricks.isEmpty()) {
+        if (!bricks.isEmpty()) {
             if (bricks.getFirst().getWidth() <= 40) {
                 rate = 2;
             }

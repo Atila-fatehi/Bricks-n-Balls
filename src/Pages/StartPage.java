@@ -1,14 +1,18 @@
 package Pages;
 
+import DataBase.data;
 import Music.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class StartPage extends JFrame {
+    ArrayList<data> history = new ArrayList<>();
     public StartPage(MusicPlayer musicPlayer) {
         getContentPane().setBackground(new Color(0xA6C8EA));
         setTitle("Swipe Brick Breaker+");
@@ -19,6 +23,19 @@ public class StartPage extends JFrame {
         setResizable(false);
 
         int highScore = 0;
+
+        File fileSave = new File(Paths.get("").toAbsolutePath() + "\\src\\DataBase\\history.ser");
+        try (FileInputStream fileIn = new FileInputStream(fileSave);
+             ObjectInputStream objIn = new ObjectInputStream(fileIn)) {
+            history = (ArrayList<data>) objIn.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+
+        }
+        for (int i = 0; i < history.size(); i++) {
+            if(history.get(i).getScore() > highScore){
+                highScore = history.get(i).getScore();
+            }
+        }
 
         JLabel label = new JLabel("HighScore : " + String.valueOf(highScore));
         label.setHorizontalAlignment(JLabel.CENTER);
